@@ -8,6 +8,9 @@ object lionel {
 	method image() {
 		return "lionel-titular.png"
 	}
+	method irALaPelota(param1) {
+		position = pelota.position()
+	}
 	
 }
 
