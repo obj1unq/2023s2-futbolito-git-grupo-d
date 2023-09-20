@@ -14,5 +14,9 @@ object lionel {
 
 object pelota {
 	const property image="pelota.png"
-	var property position = game.at(5,5)	
+	var property position = game.at(5,5)
+	
+	method esquina(){
+		position = game.at(0,0)
+	}	
 }
