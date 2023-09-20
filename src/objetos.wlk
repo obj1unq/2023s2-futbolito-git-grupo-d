@@ -22,7 +22,6 @@ object lionel {
 }
 
 
-
 object pelota {
 	const property image="pelota.png"
 	
