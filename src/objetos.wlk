@@ -8,6 +8,9 @@ object lionel {
 	method image() {
 		return "lionel-titular.png"
 	}
+	method irALaPelota(param1) {
+		position = pelota.position()
+	}
 	
 	method validarPosition(algo) {
 		if(position != algo.position()) {
@@ -24,7 +27,7 @@ object lionel {
 
 object pelota {
 	const property image="pelota.png"
-	
+	var property position = game.at(5,5)
 	var estado = libre
 	
 	method position(_position) {
@@ -45,6 +48,9 @@ object pelota {
 		return estado.position()
 	}
 	
+	method esquina(){
+		position = game.at(0,0)
+	}	
 }
 
 object llevada {
