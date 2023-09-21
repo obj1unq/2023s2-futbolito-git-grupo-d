@@ -23,6 +23,11 @@ object lionel {
 		self.validarPosition()
 		pelotaDeLio.serLlevada(self)
 	}
+	
+	method mover(nuevaPosicion){
+		position = nuevaPosicion
+		pelotaDeLio.mover(nuevaPosicion)
+	}
 
 }
 
@@ -32,8 +37,8 @@ object pelota {
 	var property position = game.at(5, 5)
 	var estado = libre
 
-	method position(_position) {
-		estado.position(_position)
+	method mover(_position) {
+		estado.mover(_position,self)
 	}
 
 	method serLlevada(_jugador) {
@@ -42,7 +47,6 @@ object pelota {
 	}
 
 	method dejarLlevada() {
-		libre.position(self.position())
 		estado = libre
 	}
 
@@ -64,15 +68,14 @@ object llevada {
 		return jugador.position()
 	}
 
-	method position(_position) {
-		self.error("me estan llevando")
+	method mover(_position,pelota) {
+		pelota.position(_position)
 	}
 
 }
 
 object libre {
 
-	var property position = game.at(5, 5)
-
+	method mover(_position, pelota){}
 }
 
