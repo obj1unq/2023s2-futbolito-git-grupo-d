@@ -1,75 +1,127 @@
-/** First Wollok example */
 import wollok.game.*
 
 object lionel {
-	
-	var property position = game.at(3,5)
-	
+
+	var property position = game.at(3, 5)
+	var property pelotaDeLio = pelota
+	var property llevando = estadoLibre
+	var property camiseta = camisetaTitular
+
+	method position(_position) {
+		position = _position
+		llevando.moverPelota(self)
+	}
+
 	method image() {
 		return "lionel-titular.png"
 	}
-	method irALaPelota(param1) {
-		position = pelota.position()
+
+	method irALaPelota() {
+		position = pelotaDeLio.position()
 	}
-	
-	method validarPosition(algo) {
-		if(position != algo.position()) {
-			self.error("No estoy donde puedo hacerlo")
+
+	method llevarLaPelota() {
+		self.validarTieneLaPelota()
+		llevando.cambiarEstado(self)
+	}
+
+	method validarTieneLaPelota() {
+		if (position != pelotaDeLio.position()) {
+			self.error("no tengo la pelota")
 		}
 	}
-	method llevar(pelota) {
-		self.validarPosition(pelota)
-		pelota.serLlevada(self)
-	}
-	
-}
 
+	method patear() {
+		self.validarTieneLaPelota()
+		llevando.patear(self)
+	}
+
+	method taquito() {
+		self.validarTieneLaPelota()
+		llevando.taquito(self)
+	}
+
+	method cambiarCamiseta() {
+	}
+
+}
 
 object pelota {
-	const property image="pelota.png"
-	var property position = game.at(5,5)
-	var estado = libre
-	
-	method position(_position) {
-		estado.position(_position)
-	}
-	
-	method serLlevada(_jugador) {
-		llevada.jugador(_jugador)
-		estado = llevada	
-	}
-	
-	method dejarLlevada() {
-		libre.position(self.position())
-		estado = libre
-	}
-	
-	method position() {
-		return estado.position()
-	}
-	
-	method esquina(){
-		position = game.at(0,0)
-	}	
-}
 
-object llevada {
+	const property image = "pelota.png"
+	var property position = game.at(5, 5)
+	const distanciaPateado = 3
+	const distanciaTaquito = 2
 
-	var property jugador = null
-	
-	method position() {
-		return jugador.position()
+	method irAlOrigen() {
+		position = game.at(0, 0)
 	}
-	
-	method position(_position) {
-		self.error("me estan llevando")
+
+	method serPateada() {
+		position = position.right(self.recorridoPosible(game.width() - 1, distanciaPateado))
 	}
-		
-}
 
-object libre {
-	
-	var property position = game.at(5,5)
+	method taquito() {
+		position = position.left(self.recorridoPosible(0, distanciaTaquito))
+	}
 
+	method recorridoPosible(borde, recorrido) {
+		return self.distanciaAlBorde(borde).min(recorrido)
+	}
+
+	method distanciaAlBorde(borde) {
+		return (borde - self.position().x()).abs()
+	}
 
 }
+
+object estadoLlevando {
+
+	const cambioEstado = estadoLibre
+
+	method moverPelota(jugador) {
+		jugador.pelotaDeLio().position(jugador.position())
+	}
+
+	method cambiarEstado(jugador) {
+		jugador.llevando(cambioEstado)
+	}
+
+	method patear(jugador) {
+		self.cambiarEstado(jugador)
+		jugador.pelotaDeLio().serPateada()
+	}
+
+	method taquito(jugador) {
+		self.cambiarEstado(jugador)
+		jugador.pelotaDeLio().taquito()
+	}
+
+}
+
+object estadoLibre {
+
+	const cambioEstado = estadoLlevando
+
+	method moverPelota(juegador) {
+	}
+
+	method cambiarEstado(jugador) {
+		jugador.llevando(cambioEstado)
+	}
+
+	method patear(jugador) {
+		jugador.pelotaDeLio().serPateada()
+	}
+
+	method taquito(jugador) {
+		jugador.pelotaDeLio().taquito()
+	}
+
+}
+
+object camisetaTitular {
+
+
+}
+
